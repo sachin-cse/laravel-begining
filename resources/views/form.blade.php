@@ -11,6 +11,19 @@
     <title>Registration form</title>
   </head>
   <body>
+    @if(session('status'))
+<div class="alert alert-success" role="alert">
+	<button type="button" class="close" data-dismiss="alert">×</button>
+	{{ session('status') }}
+</div>
+@elseif(session('failed'))
+<div class="alert alert-success" role="alert">
+	<button type="button" class="close" data-dismiss="alert">×</button>
+	{{ session('failed') }}
+</div>
+@endif
+
+
     <form action="{{url('/')}}/register" method="post">
         @csrf
 
