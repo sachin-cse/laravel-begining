@@ -7,7 +7,7 @@ class UserRegistration extends Model {
     public $timestamps = true;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'message', 'attachment',
     ];
 }
 ?>
