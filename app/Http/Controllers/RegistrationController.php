@@ -16,7 +16,8 @@ class RegistrationController extends Controller
 {
     //indec page
     public function index(){
-        return view('form');
+        $emails = UserRegistration::pluck('email', 'id');
+        return view('form', compact('emails'));
     }
 
     // save records
@@ -27,6 +28,7 @@ class RegistrationController extends Controller
             'email' => 'required|email',
             'msg' => 'required',
             'attachment' => 'required|nullable|max:2048',
+            'captcha' => 'required|captcha',
             ];
         // print_r($request->all());
         $validator = Validator::make($request->all(), $rules);
@@ -76,4 +78,8 @@ class RegistrationController extends Controller
             }
         }
     }
+
+    public function reloadCaptcha(){
+       return response()->json(['captcha' => captcha_img('math')]);
+    } 
 }

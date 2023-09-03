@@ -17,6 +17,12 @@
      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
 
 
 
@@ -64,7 +70,17 @@
 
     <div class="form-group">
         <label for="email"> Receipent Email:</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{old('email')}}">
+        {{-- <input type="email"  class="form-control" id="email" name="email" value="{{old('email')}}"> --}}
+        <select class="form-control select2" id="email" name="email">
+          <option value="">Select an email</option>
+          @foreach($emails as $email)
+          <option value="{{$email}}">{{$email}}</option>
+          @endforeach
+          <option value="other">Choose Other Email</option>
+        </select>
+        <input type="email" class="form-control mt-2" id="other_email" name="email" placeholder="Enter a new email address" style="display: none;">
+
+        
 <span class="text-danger">
     @error('email')
     <script>
@@ -91,13 +107,44 @@
         <label for="message">Message:</label>
         <textarea class="form-control" id="msg" name="msg" rows="4" cols="50">{{old('msg')}}</textarea>
 <span class="text-danger">
-    @error('attachment')
+    @error('msg')
     <script>
     toastr.error("{{$message}}", "Error", {"closeButton" : true, "timeOut": "5000"})
     </script> 
     @enderror
 </span>
     </div>
+
+    {{-- captcha --}}
+
+    <div class="form-group">
+      <div class="captcha">
+      <span>{!! captcha_img('math') !!}</span>
+      <button type="button" class="btn btn-danger reload" id="reload">
+        &#x21bb;
+      </button>
+      {{-- <label for="message">Message:</label>
+      <textarea class="form-control" id="msg" name="msg" rows="4" cols="50">{{old('msg')}}</textarea>
+<span class="text-danger">
+  @error('attachment')
+  <script>
+  toastr.error("{{$message}}", "Error", {"closeButton" : true, "timeOut": "5000"})
+  </script> 
+  @enderror
+</span> --}}
+</div>
+</div>
+
+<div class="form-group">
+  <input type="text" class="form-control" placeholder="enter captcha" name="captcha">
+  <span class="text-danger">
+    @error('captcha')
+    <script>
+    toastr.error("Inavalid captcha", "Error", {"closeButton" : true, "timeOut": "5000"})
+    </script> 
+    @enderror
+</span>
+</div>
 
 
     <button class="btn btn-primary">Submit</button>
@@ -122,7 +169,30 @@
   }
   toastr.error("{{session('failed')}}");
   @endif
-    </>
+    </script>
+
+    <script>
+      $('#reload').click(function(){
+        $.ajax({
+          type:'GET',
+          url:'reload-captcha',
+          success:function(data){
+            $(".captcha span").html(data.captcha)
+          }
+        });
+      });
+
+// for drop dwon menu
+    $('.select2').select2();
+    // handle the other option
+    $('#email').change(function(){
+      if($(this).val() === 'other'){
+        $('#other_email').show();
+      } else {
+        $('#other_email').hide();
+      }
+    });
+      </script>
 
   </body>
 </html>

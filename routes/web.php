@@ -44,3 +44,6 @@ use App\Http\Controllers\RegistrationController;
 
 Route::get('/register', [RegistrationController::class, 'index']);
 Route::post('/register', [RegistrationController::class, 'register']);
+// for captcha route
+Route::get('/reload-captcha', [RegistrationController::class, 'reloadCaptcha']);
+// Route::get('/', [RegistrationController::class, 'index']);
