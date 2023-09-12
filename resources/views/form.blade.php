@@ -78,7 +78,7 @@
           @endforeach
           <option value="other">Choose Other Email</option>
         </select>
-        <input type="email" class="form-control mt-2" id="other_email" name="email" placeholder="Enter a new email address" style="display: none;">
+        <input type="email" class="form-control mt-2" id="other_email" name="other_email" placeholder="Enter a new email address" style="display: none;">
 
         
 <span class="text-danger">
@@ -182,17 +182,49 @@
         });
       });
 
-// for drop dwon menu
-    $('.select2').select2();
-    // handle the other option
-    $('#email').change(function(){
-      if($(this).val() === 'other'){
-        $('#other_email').show();
-      } else {
-        $('#other_email').hide();
-      }
+
+    function toggleOtherEmailInput() {
+        var selectedOption = $('#email option:selected').val();
+        if (selectedOption === 'other') {
+            $('#other_email').show();
+            $('#other_email').prop('disabled', false); // Enable the input field
+        } else {
+            $('#other_email').hide();
+            $('#other_email').prop('disabled', true); // Disable the input field
+        }
+    }
+
+    $(document).ready(function () {
+        toggleOtherEmailInput(); // Initial setup
+        $('#email').change(function () {
+            toggleOtherEmailInput(); // Handle changes
+        });
     });
       </script>
+
+
+
+<script>
+  // Function to show/hide the input field based on the selected option
+  function toggleOtherEmailInput() {
+    var selectedOption = $('#email option:selected');
+    if (selectedOption.val() === 'other') {
+      $('#other_email').show();
+      $('#other_email').attr('name', 'other_email'); // Change the input field name
+    } else {
+      $('#other_email').hide();
+      $('#other_email').removeAttr('name'); // Remove the input field name
+    }
+  }
+
+  // Execute the function when the page loads and when the select field changes
+  $(document).ready(function () {
+    toggleOtherEmailInput(); // Initial setup
+    $('#email').change(function () {
+      toggleOtherEmailInput(); // Handle changes
+    });
+  });
+</script>
 
   </body>
 </html>
